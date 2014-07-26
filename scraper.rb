@@ -159,7 +159,7 @@ require 'json'
 # url = @POLICIES + ENV['MORPH_KEY']
 # warn "Fetching <#{url}>"
 url = 'theyworkforyou_policies.json'
-policy_ids = JSON.parse(open(url).read ).map { |e| e['id'] }.take(2)
+policy_ids = JSON.parse(File.open(url).read ).map { |e| e['id'] }.take(2)
 
 # policy_ids = [363]
 
