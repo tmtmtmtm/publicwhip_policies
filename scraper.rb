@@ -153,8 +153,12 @@ end
 
 
 require 'scraperwiki'
+require 'json'
 
-policy_ids = [363]
+@POLICIES = 'https://api.morph.io/tmtmtmtm/theyworkforyou_policies/data.json?query=select%20id%20from%20data&key='
+url = @POLICIES + ENV['MORPH_KEY']
+warn "Fetching <#{url}>"
+policy_ids = JSON.parse(open(url).read ).map { |e| e['id'] }.take(2)
 
 def store_policy(pid)
   policy = PolicyScraper.new("policy.php?id=#{pid}").as_hash
