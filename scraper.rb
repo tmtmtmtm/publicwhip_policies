@@ -7,8 +7,9 @@ class PWScraper
 
   require 'json'
   require 'nokogiri'
-  require 'open-uri/cached'
-  OpenURI::Cache.cache_path = '/tmp/cache'
+  require 'open-uri'
+  # require 'open-uri/cached'
+  # OpenURI::Cache.cache_path = '/tmp/cache'
 
   @@PW_URL = 'http://www.publicwhip.org.uk/'
 
