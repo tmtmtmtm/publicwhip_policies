@@ -30,7 +30,6 @@ class DivisionScraper < PWScraper
   def structure 
     return { 
       id: "pw-#{motion_date}-#{motion_id}",
-      organization_id: "uk.parliament.commons",
       text: bill,
       date: motion_date,
       hansard: hansard,
@@ -157,19 +156,30 @@ require 'scraperwiki'
 
 policy_ids = [363]
 
-policy_ids.each do |pid|
-  puts "Policy #{pid}"
+def store_policy(pid)
   policy = PolicyScraper.new("policy.php?id=#{pid}").as_hash
   motions = policy.delete(:motions)
   motions.each do |m|
+    m[:policy] = pid
     votes = m.delete(:votes)
     votes.each { |v| v[:motion] = m[:id] }
     puts "  #{m[:id]} #{m[:text]}"
-    ScraperWiki.save_sqlite([:id], m)
+    ScraperWiki.save_sqlite([:id, :policy], m)
     # Need to include :option to cope with "boths"
     ScraperWiki.save_sqlite([:motion, :constituency, :option], votes, 'votes')
   end
 end
+
+policy_ids.each do |pid|
+  unless (ScraperWiki.select('* FROM data WHERE policy=?', pid).empty? rescue true) 
+    puts "Skipping Policy #{pid}"
+    next
+  end
+  puts "Fetching Policy #{pid}"
+  store_policy(pid)
+end
+
+
 
 
 
