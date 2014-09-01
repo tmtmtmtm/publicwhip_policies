@@ -184,7 +184,6 @@ end
 
 # Division pages don't include the unique voter id, only a link to a
 # page that includes it!
-ScraperWiki.sqliteexecute('DROP TABLE voters')
 data = { url: 'http://www.publicwhip.org.uk/mp.php?mpn=Graham_Brady&mpc=Altrincham_and_Sale_West&house=commons', id: 10062 }
 ScraperWiki.save_sqlite([:url, :id], data, 'voters')
 
