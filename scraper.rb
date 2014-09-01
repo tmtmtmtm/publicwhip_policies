@@ -199,10 +199,6 @@ voter_urls.map { |h| h['url'] }.each do |url|
   end
 end
 
-
-
-
-
-
-
+ScraperWiki.sqliteexecute('CREATE INDEX IF NOT EXISTS voterididx ON voters (id)')
+ScraperWiki.sqliteexecute('CREATE INDEX IF NOT EXISTS voteurlidx ON votes (url)')
 
