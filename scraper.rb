@@ -190,7 +190,7 @@ ScraperWiki.save_sqlite([:url, :id], data, 'voters')
 voter_urls = ScraperWiki.select('DISTINCT v.url FROM votes v LEFT JOIN voters mp ON v.url = mp.url WHERE mp.id IS NULL') rescue false
 voter_urls.map { |h| h['url'] }.each do |url|
   page = open(url).read
-  if id = page[/<title>Voting Record[^(]+\((\d+)\)/, 1]
+  if id = page[/<title>Voting Record \&.*?\((\d+)\) \&/,1]
     data = { url: url, id: id }
     ScraperWiki.save_sqlite([:url, :id], data, 'voters')
     puts "MP #{url} = #{id}"
