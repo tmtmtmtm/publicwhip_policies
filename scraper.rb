@@ -37,6 +37,7 @@ class DivisionScraper < PWScraper
       date: motion_date,
       datetime: datetime,
       votes: votes,
+      shortdesc: shortdesc,
     }
   end
 
@@ -79,6 +80,11 @@ class DivisionScraper < PWScraper
 
   def pw_link
     URI.parse(@@PW_URL + constituency_link.gsub('&sort=constituency',''))
+  end
+
+  def shortdesc
+    t = @doc.css("div.motion p").find { |n| n.text[/The majority of MPs/] } or return
+    t.text.strip
   end
 
   def votes
@@ -174,7 +180,7 @@ def store_policy(pid)
 end
 
 policy_ids.each do |pid|
-  unless (ScraperWiki.select('* FROM data WHERE policy=?', pid).empty? rescue true) 
+  unless (ScraperWiki.select('* FROM data WHERE policy=? AND shortdesc IS NOT NULL', pid).empty? rescue true) 
     puts "Skipping Policy #{pid}"
     next
   end
