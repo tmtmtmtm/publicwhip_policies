@@ -84,7 +84,9 @@ class DivisionScraper < PWScraper
 
   def shortdesc
     t = @doc.css("div.motion p").find { |n| n.text[/The majority of MPs/] } or return
-    t.text.strip
+    r = t.text.strip
+    puts r
+    return r
   end
 
   def votes
